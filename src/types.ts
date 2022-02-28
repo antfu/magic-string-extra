@@ -1,3 +1,5 @@
+import type { ExclusionRange } from 'magic-string'
+
 export interface SourceMapOptions {
   /**
    * Whether the mapping should be high-resolution.
@@ -20,4 +22,13 @@ export interface SourceMapOptions {
    * Whether to include the original content in the map's sourcesContent array.
    */
   includeContent: boolean
+}
+
+export interface MagicStringOptions {
+  filename: string
+  indentExclusionRanges: ExclusionRange | Array<ExclusionRange>
+  /**
+   * The default sourcemap options.
+   */
+  sourcemapOptions: SourceMapOptions
 }

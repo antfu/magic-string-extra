@@ -1,20 +1,24 @@
-import type { ExclusionRange, IndentOptions, MagicStringOptions, OverwriteOptions, SourceMap } from 'magic-string'
+import type { ExclusionRange, IndentOptions, OverwriteOptions, SourceMap } from 'magic-string'
 import MagicString from 'magic-string'
-import type { SourceMapOptions } from './types'
+import type { MagicStringOptions, SourceMapOptions } from './types'
 
 export type { ExclusionRange, IndentOptions, MagicStringOptions, OverwriteOptions, SourceMap, SourceMapOptions }
 
 export class MagicStringExtra {
   private s: MagicString
+  private defaultSourcemapOptions: Partial<SourceMapOptions> | undefined
 
   constructor(s: MagicString)
   constructor(code: string, options?: Partial<MagicStringOptions>)
   constructor(code: string | MagicString, options?: Partial<MagicStringOptions>) {
-    if (typeof code === 'string')
+    if (typeof code === 'string') {
       // https://github.com/Rich-Harris/magic-string/pull/183
       this.s = new MagicString(code, options as MagicStringOptions)
-    else
+      this.defaultSourcemapOptions = options?.sourcemapOptions
+    }
+    else {
       this.s = code
+    }
   }
 
   /**
@@ -63,13 +67,12 @@ export class MagicStringExtra {
    * When the string has not changed, `null` will be returned skip the Rollup transformation.
    */
   toRollupResult(sourcemap = true, options?: Partial<SourceMapOptions>) {
-    if (!this.hasChanged())
+    const code = this.s.toString()
+    if (code === this.s.original)
       return null
-    const result: { code: string; map?: SourceMap } = {
-      code: this.s.toString(),
-    }
+    const result: { code: string; map?: SourceMap } = { code }
     if (sourcemap)
-      result.map = this.s.generateMap(options)
+      result.map = this.generateMap(options)
     return result
   }
 
@@ -134,14 +137,19 @@ export class MagicStringExtra {
    * Does what you'd expect.
    */
   clone() {
-    return new MagicStringExtra(this.s.clone())
+    const clone = new MagicStringExtra(this.s.clone())
+    clone.defaultSourcemapOptions = { ...this.defaultSourcemapOptions }
+    return clone
   }
 
   /**
    * Generates a version 3 sourcemap.
    */
   generateMap(options?: Partial<SourceMapOptions>) {
-    return this.s.generateMap(options)
+    return this.s.generateMap({
+      ...this.defaultSourcemapOptions,
+      ...options,
+    })
   }
 
   /**
@@ -149,7 +157,10 @@ export class MagicStringExtra {
    * Useful if you need to manipulate the sourcemap further, but most of the time you will use `generateMap` instead.
    */
   generateDecodedMap(options?: Partial<SourceMapOptions>) {
-    return this.s.generateDecodedMap(options)
+    return this.s.generateDecodedMap({
+      ...this.defaultSourcemapOptions,
+      ...options,
+    })
   }
 
   getIndentString(): string {
