@@ -30,5 +30,5 @@ export interface MagicStringOptions {
   /**
    * The default sourcemap options.
    */
-  sourcemapOptions: SourceMapOptions
+  sourcemapOptions: Partial<SourceMapOptions>
 }
