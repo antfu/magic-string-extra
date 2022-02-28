@@ -2,11 +2,24 @@
 
 [![NPM version](https://img.shields.io/npm/v/magic-string-extra?color=a1b858&label=)](https://www.npmjs.com/package/magic-string-extra)
 
-Extended [`magic-string`](https://github.com/Rich-Harris/magic-string) with extra utilities.
+Extended [Rich-Harris/magic-string](https://github.com/Rich-Harris/magic-string) with extra utilities.
+
+## Install
+
+```bash
+npm i magic-string-extra
+```
+
+`magic-string-extra` can be a drop-in replacement for `magic-string`:
+
+```diff
+- import MagicString from 'magic-string'
++ import MagicString from 'magic-string-extra'
+```
 
 ## Extra Utils
 
-Check [`magic-string`](https://github.com/Rich-Harris/magic-string)'s documentation for utils provided by it.
+Check [`magic-string`](https://github.com/Rich-Harris/magic-string)'s documentation for the base utils.
 
 ### `.replace()`
 
