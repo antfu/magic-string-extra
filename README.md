@@ -35,7 +35,7 @@ s.replace(/foo/g, 'bar')
 s.replace(/(\w)(\d+)/g, (_, $1, $2) => $1.toUpperCase() + $2)
 ```
 
-The differences between `String.replace`:
+The differences from `String.replace`:
 - It will always match against the **original string**
 - It mutates the magic string state (use `.clone()` to be immutable)
 
@@ -57,7 +57,7 @@ s.hasChanged() // true
 
 ### `.toRollupResult()`
 
-It's common to use the magic string for code transformations in plugins. This function provides a shorthand to generate the result in Rollup's `TransformResult` format. When the string has not changed, `null` will be returned skip the Rollup transformation.
+It's common to use the magic string for code transformations in plugins. This function provides a shorthand to generate the result in Rollup's `TransformResult` format. When the string has not changed, `null` will be returned to skip the Rollup transformation.
 
 ```ts
 import MagicString from 'magic-string-extra'

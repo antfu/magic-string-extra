@@ -6,25 +6,25 @@ export type { ExclusionRange, IndentOptions, MagicStringOptions, OverwriteOption
 
 export class MagicStringExtra {
   private s: MagicString
-  private defaultSourcemapOptions: Partial<SourceMapOptions> | undefined
+  private sourcemapOptions: Partial<SourceMapOptions> | undefined
 
   constructor(s: MagicString)
   constructor(code: string, options?: Partial<MagicStringOptions>)
-  constructor(code: string | MagicString, options?: Partial<MagicStringOptions>) {
-    if (typeof code === 'string') {
+  constructor(arg1: string | MagicString, options?: Partial<MagicStringOptions>) {
+    if (typeof arg1 === 'string') {
       // https://github.com/Rich-Harris/magic-string/pull/183
-      this.s = new MagicString(code, options as MagicStringOptions)
-      this.defaultSourcemapOptions = options?.sourcemapOptions
+      this.s = new MagicString(arg1, options as MagicStringOptions)
+      this.sourcemapOptions = options?.sourcemapOptions
     }
     else {
-      this.s = code
+      this.s = arg1
     }
   }
 
   /**
    * Do a String.replace with magic!
    *
-   * Caveat:
+   * Caveats:
    * - It will always match against the **original string**
    * - It mutates the magic string state (use `.clone()` to be immutable)
    */
@@ -64,14 +64,14 @@ export class MagicStringExtra {
 
   /**
    * A shorthand to generate the result in Rollup's `TransformResult` format.
-   * When the string has not changed, `null` will be returned skip the Rollup transformation.
+   * When the string has not changed, `null` will be returned to skip the Rollup transformation.
    */
-  toRollupResult(sourcemap = true, options?: Partial<SourceMapOptions>) {
+  toRollupResult(generateMap = true, options?: Partial<SourceMapOptions>) {
     const code = this.s.toString()
     if (code === this.s.original)
       return null
     const result: { code: string; map?: SourceMap } = { code }
-    if (sourcemap)
+    if (generateMap)
       result.map = this.generateMap(options)
     return result
   }
@@ -138,7 +138,7 @@ export class MagicStringExtra {
    */
   clone() {
     const clone = new MagicStringExtra(this.s.clone())
-    clone.defaultSourcemapOptions = { ...this.defaultSourcemapOptions }
+    clone.sourcemapOptions = { ...this.sourcemapOptions }
     return clone
   }
 
@@ -147,7 +147,7 @@ export class MagicStringExtra {
    */
   generateMap(options?: Partial<SourceMapOptions>) {
     return this.s.generateMap({
-      ...this.defaultSourcemapOptions,
+      ...this.sourcemapOptions,
       ...options,
     })
   }
@@ -158,7 +158,7 @@ export class MagicStringExtra {
    */
   generateDecodedMap(options?: Partial<SourceMapOptions>) {
     return this.s.generateDecodedMap({
-      ...this.defaultSourcemapOptions,
+      ...this.sourcemapOptions,
       ...options,
     })
   }
