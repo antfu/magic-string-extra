@@ -22,7 +22,9 @@ s.replace(/foo/g, 'bar')
 s.replace(/(\w)(\d+)/g, (_, $1, $2) => $1.toUpperCase() + $2)
 ```
 
-The difference between `String.replace` is this function will match with the **original string** and mutated the magic string state.
+The differences between `String.replace`:
+- It will always match against the **original string**
+- It mutates the magic string state (use `.clone()` to be immutable)
 
 ### `.hasChanged()`
 
@@ -55,6 +57,7 @@ s.toRollupResult() // { code, map } | null
 ## Included Upstream PRs
 
 - [#183 - fix(types): mark MagicString options as optional](https://github.com/Rich-Harris/magic-string/pull/183)
+- [#179 - docs: add TSDoc](https://github.com/Rich-Harris/magic-string/pull/179)
 
 ## Sponsors
 
