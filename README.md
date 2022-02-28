@@ -50,7 +50,7 @@ const s = new MagicString(source)
 
 s.hasChanged() // false
 
-s.prepand('foo')
+s.prepend('foo')
 
 s.hasChanged() // true
 ```
