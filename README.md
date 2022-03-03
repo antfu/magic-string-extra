@@ -1,3 +1,7 @@
+# DEPRECATED. It has been ported back to [magic-string](https://github.com/Rich-Harris/magic-string) `>= 0.26.0`
+
+-----
+
 # magic-string-extra
 
 [![NPM version](https://img.shields.io/npm/v/magic-string-extra?color=a1b858&label=)](https://www.npmjs.com/package/magic-string-extra)
